@@ -1,12 +1,23 @@
 <resources>
     <string name="app_name">SCORM Player</string>
+    <string name="auth_shared_preference_file_key">auth_data</string>
+    <string name="auth_token_key">auth_token_key</string>
+    <string name="auth_username_key">auth_username_key</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome "</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <!--  Strings related to SCO listing/download/installation -->
+    <string name="sco_items_update_failed">Failed To Update ScoList</string>
+    <string name="sco_download_failed">Failed To Download Sco</string>
+    <string name="sco_description">A SCO Session.</string>
+    <string name="sco_card_download">Download</string>
+    <string name="sco_card_run">Run</string>
+    <string name="sco_card_delete">Delete</string>
 </resources>

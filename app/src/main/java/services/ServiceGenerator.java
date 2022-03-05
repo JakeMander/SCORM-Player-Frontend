@@ -6,13 +6,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Every field in this class is static as we want to use a single
- * instance of the OkHTTPClient to manage the conections/reuse open
+ * instance of the OkHTTPClient to manage the connections/reuse open
  * sockets. We could do this using DI, but that's a bit of a faff in
  * Android, so we'll use static field instead. Remember, static functions
  * can only access other static functions inside a class!
  */
 public class ServiceGenerator {
-    private static final String SCORM_API_BASE_URL = "https://192.168.0.37:44369";
+    private static final String SCORM_API_BASE_URL = "https://10.0.2.2:44369";
 
     /**
      * Builds the HTTP client that will handle the network communication.
