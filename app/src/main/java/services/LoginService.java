@@ -9,8 +9,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface LoginService {
-
-
     @POST("/authentication/login")
     Call<LoggedInUser> login(@Body Credentials credential);
 }

@@ -4,14 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Patterns;
 
+import com.example.myapplication.data.AuthDataRepository;
 import com.example.myapplication.data.LoginRepository;
 import com.example.myapplication.data.Result;
 import com.example.myapplication.data.model.LoggedInUser;
 import com.example.myapplication.R;
 
 import org.bouncycastle.jcajce.provider.digest.SHA3;
+import org.json.JSONException;
 
 import java.nio.charset.StandardCharsets;
 
@@ -24,9 +29,13 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private AuthDataRepository authDataRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
+    LoginViewModel(LoginRepository loginRepository,
+                   AuthDataRepository authDataRepository) {
+
         this.loginRepository = loginRepository;
+        this.authDataRepository = authDataRepository;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -86,7 +95,15 @@ public class LoginViewModel extends ViewModel {
     }
 
     private void handleSuccessfulResponse(LoggedInUser loggedInUser) {
-        LoggedInUserView userView = new LoggedInUserView(loggedInUser.getUsername());
+        //  Store auth token and username KVPs to storage.
+        authDataRepository.storeAuthData(loggedInUser);
+
+        LoggedInUserView userView = new LoggedInUserView(loggedInUser.getUsername(),
+                loggedInUser.getAuthenticationToken());
+
+        //  Set the login result as a created LoggedInUserView
+        //  which will be used to update any UI specific
+        //  elements.
         LoginResult result = new LoginResult(userView);
         loginResult.setValue(result);
     }
