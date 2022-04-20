@@ -7,6 +7,7 @@ import com.example.myapplication.data.model.ScoRecord;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -18,6 +19,6 @@ public interface ScoService {
     Call<List<ScoRecord>> listScos(@Header("Authorization") String authorization);
 
     @GET("/SCORMRepo/downloadsco/{scoId}")
-    Call<DownloadedSco> downloadSco(@Header("Authorization") String authorization,
-                                    @Path("scoId") String scoId);
+    Call<ResponseBody> downloadSco(@Header("Authorization") String authorization,
+                                   @Path("scoId") String scoId);
 }

@@ -20,4 +20,8 @@
     <string name="sco_card_download">Download</string>
     <string name="sco_card_run">Run</string>
     <string name="sco_card_delete">Delete</string>
+    <string name="sco_unzip_read_write_fail">An Error Has Occurred When Unzipping A SCORM
+        Collection: Cannot Read/Write To External Storage."</string>
+    <string name="sco_unzip_stream_close_fail">The Zip File Could Not Be Closed</string>
+    <string name="sco_unzip_failed_delete">The Zip File Could Not Be Deleted: </string>
 </resources>

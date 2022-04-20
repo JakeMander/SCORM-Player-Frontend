@@ -85,27 +85,36 @@
                     android:gravity="center">
                     <Button
                         android:id="@+id/button_download"
+                        android:layout_weight="1"
+                        android:textSize="10dp"
+                        android:layout_height="match_parent"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/sco_card_download"
-                        android:visibility="@{sco_record.isScoDownloaded() == true ? View.GONE : View.VISIBLE}" />
+                        android:layout_marginRight="5dp"
+                        android:visibility="@{sco_record.scoDownloaded == true ? View.GONE : View.VISIBLE}" />
 
                     <Button
                         android:id="@+id/button_run"
+                        android:textSize="10dp"
+                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/sco_card_run"
-                        android:visibility="@{sco_record.isScoDownloaded() == false ? View.GONE : View.VISIBLE}" />
+                        android:layout_marginRight="5dp"
+                        android:visibility="@{sco_record.scoDownloaded == false ? View.GONE : View.VISIBLE}" />
 
                     <Button
                         android:id="@+id/button_delete"
+                        android:textSize="10dp"
+                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/sco_card_delete"
-                        android:visibility="@{sco_record.isScoDownloaded() == false ? View.GONE : View.VISIBLE}" />
+                        android:layout_marginLeft="5dp"
+                        android:visibility="@{sco_record.scoDownloaded == false ? View.GONE : View.VISIBLE}" />
                 </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

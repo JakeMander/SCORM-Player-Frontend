@@ -7,6 +7,8 @@ import com.example.myapplication.data.model.ScoRecord;
 
 import java.util.List;
 
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import services.ScoService;
 import services.ServiceGenerator;
@@ -40,10 +42,10 @@ public class ScoRepository {
         return listScoCall;
     }
 
-    public Call<DownloadedSco> downloadSco(String objectId) {
+    public Call<ResponseBody> downloadSco(String objectId) {
         String authToken = getAuthToken();
         ScoService scoService = ServiceGenerator.createService(ScoService.class);
-        Call<DownloadedSco> downloadScoCall = scoService.downloadSco(authToken, objectId);
+        Call<ResponseBody> downloadScoCall = scoService.downloadSco(authToken, objectId);
         return downloadScoCall;
     }
 
