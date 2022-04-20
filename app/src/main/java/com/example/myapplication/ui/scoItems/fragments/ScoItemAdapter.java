@@ -4,46 +4,145 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.AuthDataRepository;
 import com.example.myapplication.data.ScoRepository;
+import com.example.myapplication.data.ScoZipRepository;
 import com.example.myapplication.data.model.ScoRecord;
 import com.example.myapplication.databinding.ScoItemCardBinding;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHolder> {
 
-    private List<ScoRecord> trackedScoRecords = new ArrayList<ScoRecord>();
-    private Context context;
+    //  List to track the available set of SCO records in the database
+    //  that can be represented in the GUI as part of the recycler
+    //  list.
+    private List<ScoRecord> mTrackedScoRecords = new ArrayList<ScoRecord>();
+
+    private Context mContext;
+
+    //  Create the executor service which will handle the asynchronous writing
+    //  of SCO data to the app's storage. For more details see:
+    //  https://developer.android.com/guide/background/threadings
+    private ExecutorService mFileExecutorService;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ScoItemCardBinding scoItemCardBinding;
 
-        public ViewHolder(ScoItemCardBinding scoItemCardBinding)
+        public ViewHolder(ScoItemCardBinding scoItemCardBinding, ScoRepository scoRepo,
+                          ScoZipRepository zipRepo)
         {
             super(scoItemCardBinding.getRoot());
             this.scoItemCardBinding = scoItemCardBinding;
+
+            //  Handles the download operation for each SCO. Downloads the bytes,
+            //  assembles them into a ZIP and unpacks them into the app's local
+            //  Android storage.
             this.scoItemCardBinding.buttonDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(),
-                            scoItemCardBinding.textViewTitle.getText() + " Clicked",
-                            Toast.LENGTH_SHORT).show();
+                    Call<ResponseBody> downloadCall = scoRepo.downloadSco(scoItemCardBinding
+                            .getScoRecord().getScoID());
+                    downloadCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call,
+                                               Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(view.getContext(),
+                                        scoItemCardBinding.textViewTitle.getText() +
+                                                " Was Downloaded", Toast.LENGTH_SHORT).show();
+                                try {
+                                    zipRepo.saveZip(
+                                            view.getContext(),
+                                            response.body().bytes(),
+                                            scoItemCardBinding.getScoRecord().getScoID(),
+                                            scoItemCardBinding);
+
+                                    Toast.makeText(view.getContext(),
+                                            scoItemCardBinding.textViewTitle.getText() +
+                                                    " Was Installed", Toast.LENGTH_SHORT).show();
+
+                                    scoItemCardBinding.getScoRecord().setIsScoDownloaded(
+                                            view.getContext());
+                                } catch (IOException e) {
+                                    Toast.makeText(view.getContext(), "Could Not Save ZIP: "
+                                            + e, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            else
+                            {
+                                String errorMessage = "Download Error: A HTTP Error Occurred";
+                                if (response.code() >= 400 && response.code() < 500) {
+                                    errorMessage = "Download Failed: Unauthorised Request";
+                                }
+
+                                if (response.code() >= 500 && response.code() < 600) {
+                                    errorMessage = "Download Failed: Server Side Error";
+                                }
+
+                                Toast.makeText(view.getContext(), errorMessage, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            String failureMessage = "Download Failed: " + t.getMessage();
+                            Toast.makeText(view.getContext(), failureMessage, Toast.LENGTH_SHORT)
+                            .show();
+                        }
+                    });
                 }
-            })
-            ;
+            });
+
+            //  Set the listener to handle user clicks on the delete button. This will
+            //  enable the user to free up space by removing SCO's on the fly.
+            this.scoItemCardBinding.buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        zipRepo.deleteZip(itemView.getContext(),
+                                scoItemCardBinding.getScoRecord().getScoID(),
+                                scoItemCardBinding);
+                    }
+                    catch (IOException e){
+                        String errorMessage = itemView.getContext().getString(
+                                R.string.sco_unzip_failed_delete);
+                        Toast.makeText(itemView.getContext(), errorMessage + e.getMessage(),
+                                Toast.LENGTH_SHORT);
+                    }
+                }
+            });
+
+            //  Set the listener to handle user clicks on the run button. This will enable
+            //  the user to launch SCO's and start/continue a SCO session.
+            this.scoItemCardBinding.buttonRun.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+
         }
 
         /**
@@ -62,7 +161,8 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
     }
 
     public ScoItemAdapter(Context context) {
-        this.context = context;
+        this.mContext = context;
+        this.mFileExecutorService = Executors.newFixedThreadPool(4);
     }
 
     /**
@@ -70,12 +170,12 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
      * with the new set of available SCO's.
      */
     public void updateScos(List<ScoRecord> scoRecords) {
-        if(trackedScoRecords == null) {
+        if(mTrackedScoRecords == null) {
             return;
         }
 
-        trackedScoRecords.clear();
-        trackedScoRecords.addAll(scoRecords);
+        mTrackedScoRecords.clear();
+        mTrackedScoRecords.addAll(scoRecords);
         this.notifyDataSetChanged();
     }
 
@@ -85,6 +185,11 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
         // Create a new view, which defines the UI of the list item
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
+        AuthDataRepository authRepo = AuthDataRepository.getInstance(mContext);
+        ScoRepository scoRepo = ScoRepository.getInstance(authRepo);
+        ScoZipRepository zipRepo = ScoZipRepository.getInstance(mFileExecutorService);
+
+
         //  Inflate the Sco Card UI using the retrieved binding.
         ScoItemCardBinding item = ScoItemCardBinding.inflate(
                 layoutInflater, parent, false);
@@ -93,7 +198,7 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
             ToDo: Get reference to scoRepo, inject it into ViewHolder, run download
             ToDo: Save file bytes/unzip using SCODiskRepo
              */
-        return new ViewHolder(item);
+        return new ViewHolder(item, scoRepo, zipRepo);
     }
 
     /**
@@ -109,14 +214,17 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        ScoRecord boundScoRecord = trackedScoRecords.get(position);
+        ScoRecord boundScoRecord = mTrackedScoRecords.get(position);
         holder.bind(boundScoRecord);
+
+        //  Check the disk to see if the file exists.
+        boundScoRecord.setIsScoDownloaded(mContext);
     }
 
     @Override
     public int getItemCount() {
-        if (trackedScoRecords != null) {
-            return trackedScoRecords.size();
+        if (mTrackedScoRecords != null) {
+            return mTrackedScoRecords.size();
         }
         return 0;
     }

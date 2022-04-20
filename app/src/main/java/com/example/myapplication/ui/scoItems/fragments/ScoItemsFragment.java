@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 import com.example.myapplication.R;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ScoItemsFragment extends Fragment {
 
     private ScoItemsViewModel mViewModel;
