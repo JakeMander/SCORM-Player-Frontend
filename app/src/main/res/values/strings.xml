@@ -24,4 +24,10 @@
         Collection: Cannot Read/Write To External Storage."</string>
     <string name="sco_unzip_stream_close_fail">The Zip File Could Not Be Closed</string>
     <string name="sco_unzip_failed_delete">The Zip File Could Not Be Deleted: </string>
+
+    <!-- Strings related to the handling of the SCO Manifest Parsing Process -->
+    <string name="manifest_io_failure">Manifest Could Not Be Parsed Due To An IO Error: </string>
+    <string name="manifest_parser_failure">Manifest Could Not Be Parsed Due To An Parser Error: </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -33,7 +33,6 @@ public class LoginRepository {
 
         Credentials credentials = new Credentials(username, password);
         LoginService loginService = ServiceGenerator.createService((LoginService.class));
-        Call<LoggedInUser> loginCall = loginService.login(credentials);
-        return loginCall;
+        return loginService.login(credentials);
     }
 }

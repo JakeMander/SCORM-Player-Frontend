@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.scoItems.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.example.myapplication.data.ScoRepository;
 import com.example.myapplication.data.ScoZipRepository;
 import com.example.myapplication.data.model.ScoRecord;
 import com.example.myapplication.databinding.ScoItemCardBinding;
+import com.example.myapplication.ui.scoSplashPage.ScoSplashActivity;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -139,6 +142,18 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
 
+                    //  Package the scoId and send it off to the Sco splash
+                    //  page repository so the correct Manifest can be loaded
+                    //  and parsed.
+                    Bundle bundle = new Bundle();
+                    Intent intent = new Intent(view.getContext(), ScoSplashActivity.class);
+                    String scoId = scoItemCardBinding.getScoRecord().getScoID().toString();
+                    bundle.putString("SCOID", scoId );
+                    intent.putExtras(bundle);
+
+                    //  Take the user to the SCO splash page ready to interact
+                    //  with the SCO Collection.
+                    view.getContext().startActivity(intent);
                 }
             });
 

@@ -43,7 +43,7 @@ public class ScoZipRepository {
         return instance;
     }
 
-    private  ScoZipRepository(Executor fileExecutor) {
+    private ScoZipRepository(Executor fileExecutor) {
         mFileExecutor = fileExecutor;
     }
 
