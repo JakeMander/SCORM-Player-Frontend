@@ -148,7 +148,11 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
                     Bundle bundle = new Bundle();
                     Intent intent = new Intent(view.getContext(), ScoSplashActivity.class);
                     String scoId = scoItemCardBinding.getScoRecord().getScoID().toString();
-                    bundle.putString("SCOID", scoId );
+                    String scoTitle = scoItemCardBinding.getScoRecord().getVanityName();
+                    String scoAuthor = scoItemCardBinding.getScoRecord().getScoAuthor();
+                    bundle.putString("SCOID", scoId);
+                    bundle.putString("SCOTITLE", scoTitle);
+                    bundle.putString("SCOAUTHOR", scoAuthor);
                     intent.putExtras(bundle);
 
                     //  Take the user to the SCO splash page ready to interact

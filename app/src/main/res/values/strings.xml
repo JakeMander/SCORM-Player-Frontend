@@ -28,6 +28,14 @@
     <!-- Strings related to the handling of the SCO Manifest Parsing Process -->
     <string name="manifest_io_failure">Manifest Could Not Be Parsed Due To An IO Error: </string>
     <string name="manifest_parser_failure">Manifest Could Not Be Parsed Due To An Parser Error: </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Sco Splash Page Strings -->
+    <string name="sco_splash_subheader">Published By: %s</string>
+    <string name="sco_splash_schema">Schema: %s</string>
+    <string name="sco_splash_schemaVersion">Schema Version: %s</string>
+    <string name="sco_splash_organizationCount">Organizations: %d</string>
+    <string name="sco_splash_resourceCount">Resources: %d</string>
+
+    <!-- Sco Splash Page Fragment -->
+    <string name="sco_splash_fragment_title">Available SCOs</string>
 </resources>
