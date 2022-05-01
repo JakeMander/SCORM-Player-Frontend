@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/scoSplashFragTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/sco_splash_fragment_title"
@@ -18,6 +19,71 @@
             layout:layout_constraintTop_toTopOf="parent"
             layout:layout_constraintStart_toStartOf="parent"
             layout:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/splashFragRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18sp"
+            layout:layout_constraintEnd_toEndOf="parent"
+            layout:layout_constraintStart_toStartOf="parent"
+            layout:layout_constraintTop_toBottomOf="@id/scoSplashFragTitle" />
+
+        <Button
+            android:id="@+id/prevOrgButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prev"
+            layout:layout_constraintStart_toStartOf="parent"
+            layout:layout_constraintTop_toBottomOf="@id/splashFragRecyclerView"
+            layout:layout_constraintBottom_toBottomOf="parent"
+            layout:layout_constraintEnd_toStartOf="@id/nextOrgButton"
+            />
+
+        <Button
+            android:id="@+id/nextOrgButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            layout:layout_constraintStart_toEndOf="@id/prevOrgButton"
+            layout:layout_constraintTop_toBottomOf="@id/splashFragRecyclerView"
+            layout:layout_constraintBottom_toBottomOf="parent"
+            layout:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/paginationSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14sp"
+            layout:layout_constraintStart_toStartOf="parent"
+            layout:layout_constraintTop_toBottomOf="@id/nextOrgButton"
+            layout:layout_constraintEnd_toEndOf="parent"
+            layout:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/paginationHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Organization: "
+                android:textSize="14sp"
+                layout:layout_constraintBottom_toBottomOf="parent"
+                layout:layout_constraintEnd_toStartOf="@id/paginationCounter"
+                layout:layout_constraintStart_toStartOf="parent"
+                layout:layout_constraintTop_toTopOf="parent"></TextView>
+
+            <TextView
+                android:id="@+id/paginationCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unknown"
+                android:textSize="14sp"
+                layout:layout_constraintBottom_toBottomOf="parent"
+                layout:layout_constraintEnd_toEndOf="parent"
+                layout:layout_constraintStart_toEndOf="@id/paginationHeader"
+                layout:layout_constraintTop_toTopOf="parent"></TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

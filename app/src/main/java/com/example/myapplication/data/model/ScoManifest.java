@@ -3,6 +3,7 @@ package com.example.myapplication.data.model;
 import com.example.myapplication.data.ScoManifestRepository;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *  POJO Class to represent the manifest file of
@@ -28,4 +29,21 @@ public class ScoManifest {
     public ManifestMetadata getMetaData() { return mMetaData; }
     public List<ManifestOrganization> getOrganizations() { return mOrganizations; }
     public List<ManifestResource> getResources() { return mResources; }
+
+    /***
+     *  Retrieves the Launch Href of the resource that matches the provided resource
+     *  Reference.
+     * @param resourceRef
+     * @return  A string representing the launch URL of the associated matched
+     *          manifest resource element.
+     * @throws UnsupportedOperationException
+     */
+    public String GetHrefByResourceRef(String resourceRef) throws UnsupportedOperationException {
+        for (ManifestResource resource : mResources) {
+            if (resource.getResourceIdentifier().equals(resourceRef)) {
+                return resource.getHref();
+            }
+        }
+        throw new UnsupportedOperationException("No Resource Matches The Provided Ref");
+    }
 }

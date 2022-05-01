@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:layout="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"></import>
+        <variable
+            name="scoOrganizationItem"
+            type="com.example.myapplication.data.model.ManifestItem"/>
+        <variable
+            name="sco_launch_ref"
+            type="String"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scoDetailsWrapper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            layout:layout_constraintStart_toStartOf="parent"
+            layout:layout_constraintTop_toTopOf="parent"
+            layout:layout_constraintWidth_percent="0.5">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/scoDetailsTitleRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout:layout_constraintTop_toTopOf="parent"
+                layout:layout_constraintBottom_toTopOf="@id/scoDetailsStatusRow"
+                layout:layout_constraintStart_toStartOf="parent"
+                layout:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/scoTitleHeading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Sco Title:"
+                    layout:layout_constraintEnd_toStartOf="@+id/scoTitleValue"
+                    layout:layout_constraintHorizontal_bias="0.5"
+                    layout:layout_constraintHorizontal_chainStyle="spread_inside"
+                    layout:layout_constraintStart_toStartOf="parent"
+                    layout:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="5dp"
+                    ></TextView>
+
+                <TextView
+                    android:id="@+id/scoTitleValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@{scoOrganizationItem.title}"
+                    layout:layout_constraintEnd_toEndOf="parent"
+                    layout:layout_constraintHorizontal_bias="0.5"
+                    layout:layout_constraintStart_toEndOf="@+id/scoTitleHeading"
+                    layout:layout_constraintTop_toTopOf="parent"></TextView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/scoDetailsStatusRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout:layout_constraintTop_toBottomOf="@id/scoDetailsTitleRow"
+                    layout:layout_constraintBottom_toBottomOf="parent"
+                    layout:layout_constraintStart_toStartOf="parent"
+                    layout:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp"
+                    >
+                    <TextView
+                        android:id="@+id/scoStatusHeading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="Status:"
+                        layout:layout_constraintEnd_toStartOf="@+id/scoStatusValue"
+                        layout:layout_constraintBottom_toBottomOf="parent"
+                        layout:layout_constraintTop_toTopOf="parent"
+                        layout:layout_constraintTop_toBottomOf="parent"
+                        layout:layout_constraintHorizontal_bias="0.5"
+                        layout:layout_constraintHorizontal_chainStyle="spread_inside"
+                        layout:layout_constraintStart_toStartOf="parent"></TextView>
+
+                    <TextView
+                        android:id="@+id/scoStatusValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Unknown"
+                        layout:layout_constraintBottom_toBottomOf="parent"
+                        layout:layout_constraintTop_toTopOf="parent"
+                        layout:layout_constraintTop_toBottomOf="parent"
+                        layout:layout_constraintEnd_toEndOf="parent"
+                        layout:layout_constraintHorizontal_bias="0.5"
+                        layout:layout_constraintStart_toEndOf="@+id/scoStatusHeading"></TextView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scoActionsWrapper"
+            layout:layout_constraintWidth_percent="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            layout:layout_constraintEnd_toEndOf="parent"
+            layout:layout_constraintTop_toTopOf="parent"
+            layout:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <Button
+                android:id="@+id/launchScoButton"
+                android:layout_width="88dp"
+                android:layout_height="48dp"
+                android:text="Launch"
+                android:textSize="8sp"
+                layout:layout_constraintBottom_toBottomOf="parent"
+                layout:layout_constraintEnd_toEndOf="parent"
+                layout:layout_constraintTop_toTopOf="parent"></Button>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

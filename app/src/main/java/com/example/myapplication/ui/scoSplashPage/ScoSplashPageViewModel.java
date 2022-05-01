@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.data.ScoManifestRepository;
+import com.example.myapplication.data.model.ManifestOrganization;
 import com.example.myapplication.data.model.ScoManifest;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class ScoSplashPageViewModel extends ViewModel {
     private MutableLiveData<ScoManifestResult> mManifestResult = new MutableLiveData<>();
+    private MutableLiveData<ManifestOrganization> mSelectedOrganization = new MutableLiveData<>();
     private ScoManifestRepository mScoManifestRepo = null;
 
     public ScoSplashPageViewModel (ScoManifestRepository repo) {
@@ -26,6 +29,47 @@ public class ScoSplashPageViewModel extends ViewModel {
      *          parse.
      */
     public MutableLiveData<ScoManifestResult> getManifestResult() { return this.mManifestResult; }
+
+    /**
+     *  To allow for a cleaner UI, paginate the displayed SCOs by only
+     *  displaying the SCO's of an individual organization.
+     */
+    public MutableLiveData<ManifestOrganization> getIndexedOrganization() {
+        return this.mSelectedOrganization; }
+
+    /**
+     *  Sets the new indexed organization for the model thus updating any observing
+     *  components with a new set of referenced SCO's.
+     * @param index An index to reference the manifest's list of SCOs.
+     * @throws ArrayIndexOutOfBoundsException
+     */
+    public void setIndexedOrganization(int index)
+            throws ArrayIndexOutOfBoundsException {
+
+        ScoManifestResult result = mManifestResult.getValue();
+
+        if (result == null) {
+            Log.w(null, "Result Has Not Loaded");
+            return;
+        }
+
+        ScoManifest retrievedManifest = mManifestResult.getValue().getSuccess();
+        if (retrievedManifest != null) {
+
+            List<ManifestOrganization> organizations = retrievedManifest.getOrganizations();
+            int numberOfOrganizations = organizations.size();
+
+            if (index < 0) {
+                index = numberOfOrganizations - 1;
+            }
+
+            if (index > numberOfOrganizations - 1) {
+                index = 0;
+            }
+
+            this.mSelectedOrganization.setValue(retrievedManifest.getOrganizations().get(index));
+        }
+    }
 
     /**
      *  Initiates the parsing of the manifest found under the associated

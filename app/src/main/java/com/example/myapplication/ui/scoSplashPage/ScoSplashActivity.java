@@ -124,8 +124,6 @@ public class ScoSplashActivity extends AppCompatActivity {
 
                         infoLayout.setVisibility(View.VISIBLE);
                         scosFragment.setVisibility(View.VISIBLE);
-
-                        // Load Fragment To Display Manifest Details...
                     }
                 }
             });

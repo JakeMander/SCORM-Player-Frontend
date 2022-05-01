@@ -19,7 +19,7 @@ public class ScoManifestResult {
         this.mErrorMessage = null;
     }
 
-    ScoManifest getSuccess() { return mRetrievedManifest; }
-    String getError() { return mErrorMessage; }
+    public ScoManifest getSuccess() { return mRetrievedManifest; }
+    public String getError() { return mErrorMessage; }
 
 }

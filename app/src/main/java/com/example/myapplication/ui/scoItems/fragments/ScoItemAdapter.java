@@ -195,6 +195,8 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
 
         mTrackedScoRecords.clear();
         mTrackedScoRecords.addAll(scoRecords);
+
+
         this.notifyDataSetChanged();
     }
 
@@ -213,10 +215,6 @@ public class ScoItemAdapter extends RecyclerView.Adapter<ScoItemAdapter.ViewHold
         ScoItemCardBinding item = ScoItemCardBinding.inflate(
                 layoutInflater, parent, false);
 
-        /*
-            ToDo: Get reference to scoRepo, inject it into ViewHolder, run download
-            ToDo: Save file bytes/unzip using SCODiskRepo
-             */
         return new ViewHolder(item, scoRepo, zipRepo);
     }
 
